@@ -18,6 +18,6 @@ Have you ever found yourself context switching all the time when you are develop
 
 ## Example uses
 
-* Build your own custom actions in NeoVim to interact with or retrieve information from a running simulator, such as resetting, installing or uninstalling apps or resetting device state as part of your dev pipeline.
+* Build your own custom actions in NeoVim to interact with or retrieve information from a running simulator, such as resetting, installing or uninstalling apps or resetting device state as part of your dev workflow.
 * Boot or shut down simulators.
 * Test push notifications from NeoVim
