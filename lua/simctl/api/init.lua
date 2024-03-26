@@ -4,14 +4,24 @@ local util = require("simctl.util")
 local simctl = require("simctl.api.simctl")
 
 --- Launch app on all running or a specific iOS Simulator(s)
----@param appId string the app ID of the app to launch
----@param simulatorId string the ID of the simulator to affect. Defaults to "booted"
----@param callback function to call when command finishes
-M.launch = function(appId, simulatorId, callback)
-	simulatorId = simulatorId or "booted"
-	callback = callback or function() end
+-- @param args Table containing the following keys:
+-- @param args.appId string The application identifier of the app to launch
+-- @param args.simulatorId string The simulator identifier. Optional, defaults to "booted"
+-- @param callback function The function to call upon completion. Optional
+M.launch = function(args, callback)
+	callback = callback or function(_, _, _) end
 
-	simctl.execute({ "launch", simulatorId, appId }, function(return_val, humane, stdout, stderr)
+	if args.appId == nil then
+		util.notify("No appId provided", vim.log.levels.ERROR)
+		callback(false)
+		return
+	end
+
+	args = util.merge(args, {
+		simulatorId = "booted",
+	})
+
+	simctl.execute({ "launch", args.simulatorId, args.appId }, function(return_val, humane, stdout, stderr)
 		if return_val ~= 0 then
 			local message = humane or stderr
 			util.notify(message)
@@ -22,14 +32,24 @@ M.launch = function(appId, simulatorId, callback)
 end
 
 --- Quit app on all running or a specific iOS Simulator(s)
----@param appId string the app ID of the app to quit
----@param simulatorId string the ID of the simulator to affect. Defaults to "booted"
----@param callback function to call when command finishes, indicating success or failure
-M.terminate = function(appId, simulatorId, callback)
-	simulatorId = simulatorId or "booted"
-	callback = callback or function() end
+-- @param args Table containing the following keys:
+-- @param args.appId string The application identifier of the app to quit
+-- @param args.simulatorId string The simulator identifier. Optional, defaults to "booted"
+-- @param callback function The function to call upon completion. Optional
+M.terminate = function(args, callback)
+	callback = callback or function(_, _, _) end
 
-	simctl.execute({ "terminate", simulatorId, appId }, function(return_val, humane, stdout, stderr)
+	if args.appId == nil then
+		util.notify("No appId provided", vim.log.levels.ERROR)
+		callback(false)
+		return
+	end
+
+	args = util.merge(args, {
+		simulatorId = "booted",
+	})
+
+	simctl.execute({ "terminate", args.simulatorId, args.appId }, function(return_val, humane, stdout, stderr)
 		if return_val ~= 0 then
 			local message = humane or stderr
 			util.notify(message)
@@ -40,14 +60,24 @@ M.terminate = function(appId, simulatorId, callback)
 end
 
 --- Uninstall app on all running or a specific iOS Simulator(s)
----@param appId string the app ID of the app to uninstall
----@param simulatorId string the ID of the simulator to affect
----@param callback function to call when command finishes, indicating success or failure
-M.uninstall = function(appId, simulatorId, callback)
-	simulatorId = simulatorId or "booted"
-	callback = callback or function() end
+-- @param args Table containing the following keys:
+-- @param args.appId string The application identifier of the app to uninstall
+-- @param args.simulatorId string The simulator identifier. Optional, defaults to "booted"
+-- @param callback function The function to call upon completion. Optional
+M.uninstall = function(args, callback)
+	callback = callback or function(_, _, _) end
 
-	simctl.execute({ "uninstall", simulatorId, appId }, function(return_val, humane, stdout, stderr)
+	if args.appId == nil then
+		util.notify("No appId provided", vim.log.levels.ERROR)
+		callback(false)
+		return
+	end
+
+	args = util.merge(args, {
+		simulatorId = "booted",
+	})
+
+	simctl.execute({ "uninstall", args.simulatorId, args.appId }, function(return_val, humane, stdout, stderr)
 		if return_val ~= 0 then
 			local message = humane or stderr
 			util.notify(message)
@@ -62,6 +92,12 @@ end
 ---@param callback function to call when command finishes, indicating success or failure
 M.shutdown = function(simulatorId, callback)
 	callback = callback or function() end
+
+	if simulatorId == nil then
+		util.notify("No simulatorId provided", vim.log.levels.ERROR)
+		callback(false)
+		return
+	end
 
 	simctl.execute({ "shutdown", simulatorId }, function(return_val, humane, stdout, stderr)
 		if return_val ~= 0 then
@@ -78,6 +114,12 @@ end
 ---@param callback function app ID of the app to launch
 M.erase = function(simulatorId, callback)
 	callback = callback or function() end
+
+	if simulatorId == nil then
+		util.notify("No simulatorId provided", vim.log.levels.ERROR)
+		callback(false)
+		return
+	end
 
 	simctl.execute({ "erase", simulatorId }, function(return_val, humane, stdout, stderr)
 		if return_val ~= 0 then
