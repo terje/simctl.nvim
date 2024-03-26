@@ -32,10 +32,46 @@ Using Lazy:
 
 ## Example usage
 
-### Close a specific application on all running iOS Simulators
+### Close an app on all running iOS Simulators
 
 ```lua
-require("simctl").terminate("host.exp.Exponent")
+require("simctl.api").terminate("host.exp.Exponent")
+```
+
+### Run an app on a specific iOS Simulator
+
+```lua
+require("simctl.api").execute("host.exp.Exponent", "FE4BD15E-C65C-45DB-960A-78A771B16D17", function(success, stdout, stderr)
+    if success then
+        -- Next step of your dev workflow?
+    end
+end)
+```
+
+### Run an app on a specific iOS Simulator
+
+```lua
+require("simctl.api").execute("host.exp.Exponent", "FE4BD15E-C65C-45DB-960A-78A771B16D17", function(success, stdout, stderr)
+    if success then
+        -- Next step of your dev workflow?
+    end
+end)
+```
+
+### Shut down and erase (reset) a specific iOS Simulator
+
+Simulators cannot be erased in their Booted state so they have to be shut down first:
+
+```lua
+local simulatorId = "FE4BD15E-C65C-45DB-960A-78A771B16D17"
+local simctl = require("simctl.api")
+simctl.shutdown(simulatorId, function(success)
+  if success then
+    simctl.erase(simulatorId, function(success)
+        -- Next step of your dev workflow?
+    end)
+  end
+end)
 ```
 
 ### Future

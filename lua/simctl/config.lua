@@ -1,12 +1,12 @@
 local M = {}
 
-local defaults = {
+M.options = {
 	notify = true,
 }
 
 -- @param opts nil|table
 M.setup = function(opts)
-	M.options = vim.tbl_deep_extend("force", {}, defaults, opts or {})
+	M.options = vim.tbl_deep_extend("force", {}, M.options, opts or {})
 end
 
 return M
