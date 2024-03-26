@@ -26,7 +26,7 @@ M.execute = function(args, callback)
 	local stderrBuffer = {}
 
 	Job:new({
-		command = "xrun",
+		command = "xcrun",
 		args = simctlArguments,
 		on_exit = function(_, return_val)
 			local stderr = table.concat(stderrBuffer, "\n")
