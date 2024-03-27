@@ -18,7 +18,6 @@ Using Lazy:
 {
   "terje/simctl.nvim",
   dependencies = {
-    "rcarriga/nvim-notify",
     "nvim-lua/plenary.nvim",
   },
 }
