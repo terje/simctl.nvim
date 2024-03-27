@@ -22,24 +22,27 @@ M.execute = function(args, callback)
 		table.insert(simctlArguments, v)
 	end
 
-	local stdoutBuffer = {}
+	local stdoutBuffer = { "" }
 	local stderrBuffer = {}
+
+	-- local cmd_output = vim.fn.system("xcrun simctl listapps booted")
+	-- vim.notify(cmd_output)
 
 	Job:new({
 		command = "xcrun",
 		args = simctlArguments,
-		on_exit = function(_, return_val)
+		on_exit = function(j, return_val)
 			local stderr = table.concat(stderrBuffer, "\n")
 			local stdout = table.concat(stdoutBuffer, "\n")
 
 			callback(return_val, humaneMessage(stderr), stdout, stderr)
 		end,
-		on_stdout = function(_, data)
+		on_stdout = function(j, data)
 			if data ~= "" then
 				table.insert(stdoutBuffer, data)
 			end
 		end,
-		on_stderr = function(_, data)
+		on_stderr = function(j, data)
 			if data ~= "" then
 				table.insert(stderrBuffer, data)
 			end
