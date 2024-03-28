@@ -13,10 +13,10 @@ M.push = function(args, callback)
 	end
 
 	args = util.merge(args, {
-		simulatorId = "booted",
+		deviceId = "booted",
 	})
 
-	simctl.execute({ "push", args.simulatorId, args.appId, args.payload }, function(return_val, humane, stdout, stderr)
+	simctl.execute({ "push", args.deviceId, args.appId, args.payload }, function(return_val, humane, stdout, stderr)
 		if return_val ~= 0 then
 			local message = humane or stderr
 			util.notify(message)

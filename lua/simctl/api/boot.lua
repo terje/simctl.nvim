@@ -6,15 +6,15 @@ local simctl = require("simctl.lib.simctl")
 M.boot = function(args, callback)
 	callback = callback or function() end
 
-	if args.simulatorId == nil then
-		util.notify("No simulatorId provided", vim.log.levels.ERROR)
+	if args.deviceId == nil then
+		util.notify("No deviceId provided", vim.log.levels.ERROR)
 		callback(false)
 		return
 	end
 
 	args = util.merge(args, {})
 
-	simctl.execute({ "boot", args.simulatorId }, function(return_val, humane, stdout, stderr)
+	simctl.execute({ "boot", args.deviceId }, function(return_val, humane, stdout, stderr)
 		if return_val ~= 0 then
 			local message = humane or stderr
 			util.notify(message)

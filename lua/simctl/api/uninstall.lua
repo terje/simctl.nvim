@@ -6,7 +6,7 @@ local simctl = require("simctl.lib.simctl")
 --- Uninstall app on all running or a specific iOS Simulator(s)
 -- @param args Table containing the following keys:
 -- @param args.appId string The application identifier of the app to uninstall
--- @param args.simulatorId string The simulator identifier. Optional, defaults to "booted"
+-- @param args.deviceId string The simulator identifier. Optional, defaults to "booted"
 -- @param callback function The function to call upon completion. Optional
 M.uninstall = function(args, callback)
 	callback = callback or function(_, _, _) end
@@ -18,10 +18,10 @@ M.uninstall = function(args, callback)
 	end
 
 	args = util.merge(args, {
-		simulatorId = "booted",
+		deviceId = "booted",
 	})
 
-	simctl.execute({ "uninstall", args.simulatorId, args.appId }, function(return_val, humane, stdout, stderr)
+	simctl.execute({ "uninstall", args.deviceId, args.appId }, function(return_val, humane, stdout, stderr)
 		if return_val ~= 0 then
 			local message = humane or stderr
 			util.notify(message)

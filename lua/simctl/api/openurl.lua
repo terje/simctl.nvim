@@ -13,10 +13,10 @@ M.openurl = function(args, callback)
 	end
 
 	args = util.merge(args, {
-		simulatorId = "booted",
+		deviceId = "booted",
 	})
 
-	simctl.execute({ "openurl", args.simulatorId, args.url }, function(return_val, humane, stdout, stderr)
+	simctl.execute({ "openurl", args.deviceId, args.url }, function(return_val, humane, stdout, stderr)
 		if return_val ~= 0 then
 			local message = humane or stderr
 			util.notify(message)

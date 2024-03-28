@@ -22,7 +22,7 @@ M.listapps = function(args, callback)
 	callback = callback or function() end
 
 	args = util.merge(args or {}, {
-		simulatorId = "booted",
+		deviceId = "booted",
 	})
 
 	simctl.execute({ "listapps", "booted" }, function(return_val, humane, stdout, stderr)
