@@ -41,7 +41,7 @@ local function isValidContentSize(size)
 	return false
 end
 
---- Get or set the content size of all running or a specific iOS Simulator(s)
+--- Get or set the content size of a running or a specific iOS Simulator(s)
 -- @param args Table containing the following keys:
 -- @param args.size string The new size of the content. Returns the current size if not supplied.
 M.contentSize = function(args, callback)

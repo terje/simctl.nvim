@@ -3,7 +3,7 @@ local M = {}
 local util = require("simctl.lib.util")
 local simctl = require("simctl.lib.simctl")
 
---- Uninstall app on all running or a specific iOS Simulator(s)
+--- Uninstall app on a running or a specific iOS Simulator(s)
 -- @param args Table containing the following keys:
 -- @param args.appId string The application identifier of the app to uninstall
 -- @param args.deviceId string The simulator identifier. Optional, defaults to "booted"

@@ -3,7 +3,7 @@ local M = {}
 local util = require("simctl.lib.util")
 local simctl = require("simctl.lib.simctl")
 
---- Launch app on all running or a specific iOS Simulator(s)
+--- Launch app on a running or a specific iOS Simulator(s)
 -- @param callback function The function to call upon completion. Optional
 M.list = function(callback)
 	callback = callback or function(_, _, _) end

@@ -3,7 +3,7 @@ local M = {}
 local util = require("simctl.lib.util")
 local simctl = require("simctl.lib.simctl")
 
---- Shut down all or a specific iOS Simulator(s)
+--- Shut down a booted or a specific iOS Simulator(s)
 -- @param args Table containing the following keys:
 -- @param args.deviceId string The simulator identifier. Optional, defaults to "booted"
 ---@param callback function to call when command finishes, indicating success or failure
