@@ -8,6 +8,8 @@ Have you ever found yourself context switching all the time when you are develop
 
 ## Installation
 
+Mac OS and Xcode are required. Make sure `xcrun` is available in your terminal.
+
 Using Lazy:
 
 ```lua
