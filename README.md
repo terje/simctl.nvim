@@ -1,9 +1,5 @@
 # simctl.nvim
 
-## ⚠️ In early development ⚠️
-
-This plugin is currently in the early stages of planning and development so it is not fit for general use yet.
-
 ## 📱 ➕ ⌨️ 🟰 🚀
 
 NeoVim plugin to interact with iOS Simulators straight from the comfort of your editor. It provides a lua API for `simctl`, Apple's command line tool.
@@ -27,6 +23,10 @@ Using Lazy:
 
 The provided Lua API provides coverage of any `simctl` functions that might be most useful from NeoVim, such as launching and terminating apps, booting and shutting down devices, erasing devices and setting UI options.
 
+![Screenshot of NeoVim showing a dropdown picker of a device list](screenshot-picker.png)
+
+The API presents pickers for devices and apps if none are supplied, so most of the API functions can be called without arguments, for instance: `require("simctl.api").launch()`
+
 There is also support for testing push notifications, either through the API function, or directly from an .apns or .json file using the `SimctlNotify` command.
 
 ## Push notifications
@@ -48,6 +48,37 @@ The `SimctlNotify` command is automatically registered for `.json` and `.apns` f
 Run the command `:SimctlNotify` or assign this to your keymap for quick access to send this notification to a booted device. The command takes two optional arguments, a deviceId and an app bundle ID.
 
 ## Available API functions
+
+```lua
+local simctl = require("simctl.api")
+
+simctl.boot()
+simctl.erase()
+simctl.launch()
+simctl.list()
+simctl.listapps()
+simctl.openurl()
+simctl.push()
+simctl.shutdown()
+simctl.statusbar()
+simctl.terminate()
+simctl.ui.contentSize()
+simctl.ui.setContentSize()
+simctl.ui.appearance()
+simctl.ui.setAppearance()
+simctl.ui.increaseContrast()
+
+local pickers = require("simctl.lib.pickers")
+pickers.pickApp()
+pickers.pickDevice()
+```
+
+Add any of these to your keymap for easy access:
+```lua
+vim.keymap.set("n", "<leader>ib", function()
+require("simctl.api").boot()
+end)
+```
 
 ### Boot (start) device
 
@@ -169,6 +200,39 @@ simctl.shutdown(device, function(success)
   end
 end)
 ```
+
+### Status bar
+
+#### Set status bar values
+
+```lua
+local simctl = require("simctl.api")
+
+simctl.statusBar({
+    [simctl.StatusBarFlag.BATTERY_LEVEL] = 50,
+    [simctl.StatusBarFlag.TIME] = "09:41"
+})
+```
+
+#### Clear status bar overrides
+
+```lua
+local simctl = require("simctl.api")
+
+simctl.statusBar({ clear = true })
+```
+
+#### Get current status bar overrides
+
+```lua
+local simctl = require("simctl.api")
+
+simctl.statusBar({}, function(success, result)
+    print(result)
+end)
+```
+
+Note: This API returns just text at the moment and is liable to change into a parsed version
 
 ### Terminate app
 

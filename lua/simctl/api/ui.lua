@@ -2,6 +2,9 @@ local M = {}
 
 local util = require("simctl.lib.util")
 local simctl = require("simctl.lib.simctl")
+local aw = require("simctl.lib.async")
+local pickers = require("simctl.lib.pickers")
+local config = require("simctl.config")
 
 M.ContentSizeModifier = {
 	INCREMENT = "increment",
@@ -41,32 +44,80 @@ local function isValidContentSize(size)
 	return false
 end
 
---- Get or set the content size of a running or a specific iOS Simulator(s)
+--- Get the content size of a running or a specific iOS Simulator(s)
 -- @param args Table containing the following keys:
--- @param args.size string The new size of the content. Returns the current size if not supplied.
+-- @param args.deviceId string The id of the device to affect
 M.contentSize = function(args, callback)
 	callback = callback or function(_, _, _) end
+	args = args or {}
 
-	args = util.merge(args, {
-		deviceId = "booted",
-	})
+	aw.async(function()
+		if args.deviceId == nil and config.options.devicePicker then
+			args.deviceId = aw.await(pickers.pickDevice)
+		end
 
-	if args.size and not isValidContentSize(args.size) and not isValidContentSizeModifier(args.size) then
-		util.notify(args.size .. " is not a valid content size", vim.log.levels.ERROR)
-		callback(false)
-		return
-	end
+		args = util.merge(args, {
+			deviceId = "booted",
+		})
 
-	simctl.execute({ "ui", args.deviceId, "content_size", args.size }, function(return_val, humane, stdout, stderr)
-		if return_val ~= 0 then
-			local message = humane or stderr
-			util.notify(message)
+		simctl.execute({ "ui", args.deviceId, "content_size" }, function(return_val, humane, stdout, stderr)
+			if return_val ~= 0 then
+				local message = humane or stderr
+				util.notify(message)
 
-			callback(false, nil, stdout, stderr)
+				callback(false, nil, stdout, stderr)
+				return
+			end
+
+			callback(return_val == 0, stdout, stdout, stderr)
+		end)
+	end)
+end
+
+--- Set the content size of a running or a specific iOS Simulator(s)
+-- @param args Table containing the following keys:
+-- @param args.deviceId string The id of the device to affect
+-- @param args.size string The new size of the content
+M.setContentSize = function(args, callback)
+	callback = callback or function(_, _, _) end
+	args = args or {}
+
+	aw.async(function()
+		if args.deviceId == nil and config.options.devicePicker then
+			args.deviceId = aw.await(pickers.pickDevice)
+		end
+
+		args = util.merge(args, {
+			deviceId = "booted",
+		})
+
+		if args.size and not isValidContentSize(args.size) and not isValidContentSizeModifier(args.size) then
+			util.notify(args.size .. " is not a valid content size", vim.log.levels.ERROR)
+			callback(false)
 			return
 		end
 
-		callback(return_val == 0, stdout, stdout, stderr)
+		if not args.size then
+			local sizeOptions = {}
+			for _, size in pairs(M.ContentSize) do
+				table.insert(sizeOptions, size)
+			end
+			args.size = aw.await(function(cb)
+				pickers.pickTableValue("Pick a content size", sizeOptions, cb)
+			end)
+		end
+
+		simctl.execute({ "ui", args.deviceId, "content_size", args.size }, function(return_val, humane, stdout, stderr)
+			if return_val ~= 0 then
+				local message = humane or stderr
+				util.notify(message)
+
+				callback(false, nil, stdout, stderr)
+				return
+			end
+
+			callback(return_val == 0, stdout, stdout, stderr)
+		end)
 	end)
 end
 
@@ -84,68 +135,126 @@ local isValidAppearance = function(appearance)
 	return false
 end
 
---- Get or set the appearance of all running or a specific iOS Simulator(s)
--- @param args Table containing the following keys:
--- @param args.size string The appearance. Returns the current appearance if not supplied.
 M.appearance = function(args, callback)
 	callback = callback or function(_, _, _) end
+	args = args or {}
 
-	args = util.merge(args, {
-		deviceId = "booted",
-	})
+	aw.async(function()
+		if args.deviceId == nil and config.options.devicePicker then
+			args.deviceId = aw.await(pickers.pickDevice)
+		end
 
-	if args.appearance and not isValidAppearance(args.appearance) then
-		util.notify(args.appearance .. " is not a valid appearance", vim.log.levels.ERROR)
-		callback(false)
-		return
-	end
+		args = util.merge(args, {
+			deviceId = "booted",
+		})
 
-	simctl.execute({ "ui", args.deviceId, "appearance", args.appearance }, function(return_val, humane, stdout, stderr)
-		if return_val ~= 0 then
-			local message = humane or stderr
-			util.notify(message)
+		simctl.execute({ "ui", args.deviceId, "appearance" }, function(return_val, humane, stdout, stderr)
+			if return_val ~= 0 then
+				local message = humane or stderr
+				util.notify(message)
 
-			callback(false, nil, stdout, stderr)
+				callback(false, nil, stdout, stderr)
+				return
+			end
+
+			callback(return_val == 0, stdout, stdout, stderr)
+		end)
+	end)
+end
+
+--- Set the appearance of all running or a specific iOS Simulator(s)
+-- @param args Table containing the following keys:
+-- @param args.deviceId string The id of the device to affect
+-- @param args.size string The appearance. Returns the current appearance if not supplied.
+M.setAppearance = function(args, callback)
+	callback = callback or function(_, _, _) end
+	args = args or {}
+
+	aw.async(function()
+		if args.deviceId == nil and config.options.devicePicker then
+			args.deviceId = aw.await(pickers.pickDevice)
+		end
+
+		args = util.merge(args, {
+			deviceId = "booted",
+		})
+
+		if args.appearance and not isValidAppearance(args.appearance) then
+			util.notify(args.appearance .. " is not a valid appearance", vim.log.levels.ERROR)
+			callback(false)
 			return
 		end
 
-		callback(return_val == 0, stdout, stdout, stderr)
+		if not args.appearance then
+			local appearanceOptions = {}
+			for _, appearance in pairs(M.Appearance) do
+				table.insert(appearanceOptions, appearance)
+			end
+			args.appearance = aw.await(function(cb)
+				pickers.pickTableValue("Pick an appearance", appearanceOptions, cb)
+			end)
+		end
+
+		simctl.execute(
+			{ "ui", args.deviceId, "appearance", args.appearance },
+			function(return_val, humane, stdout, stderr)
+				if return_val ~= 0 then
+					local message = humane or stderr
+					util.notify(message)
+
+					callback(false, nil, stdout, stderr)
+					return
+				end
+
+				callback(return_val == 0, stdout, stdout, stderr)
+			end
+		)
 	end)
 end
 
 M.increaseContrast = function(args, callback)
 	callback = callback or function(_, _, _) end
+	args = args or {}
 
-	args = util.merge(args, {
-		deviceId = "booted",
-	})
+	aw.async(function()
+		if args.deviceId == nil and config.options.devicePicker then
+			args.deviceId = aw.await(pickers.pickDevice)
+		end
 
-	if args.enabled and not type(args.enabled) == "boolean" then
-		util.notify(args.enabled .. " is not a boolean", vim.log.levels.ERROR)
-		callback(false)
-		return
-	end
+		args = util.merge(args, {
+			deviceId = "booted",
+		})
 
-	local enabled
-	if args.enabled ~= nil then
-		enabled = args.enabled and "enabled" or "disabled"
-	end
-
-	simctl.execute({ "ui", args.deviceId, "increase_contrast", enabled }, function(return_val, humane, stdout, stderr)
-		if return_val ~= 0 then
-			local message = humane or stderr
-			util.notify(message)
-
-			callback(false, nil, stdout, stderr)
+		if args.enabled and not type(args.enabled) == "boolean" then
+			util.notify(args.enabled .. " is not a boolean", vim.log.levels.ERROR)
+			callback(false)
 			return
 		end
 
-		local result
-		if args.enabled == nil then
-			result = string.find(stdout, "enabled", 1, true) ~= nil
+		local enabled
+		if args.enabled ~= nil then
+			enabled = args.enabled and "enabled" or "disabled"
 		end
 
-		callback(return_val == 0, result, stdout, stderr)
+		simctl.execute(
+			{ "ui", args.deviceId, "increase_contrast", enabled },
+			function(return_val, humane, stdout, stderr)
+				if return_val ~= 0 then
+					local message = humane or stderr
+					util.notify(message)
+
+					callback(false, nil, stdout, stderr)
+					return
+				end
+
+				local result
+				if args.enabled == nil then
+					result = string.find(stdout, "enabled", 1, true) ~= nil
+				end
+
+				callback(return_val == 0, result, stdout, stderr)
+			end
+		)
 	end)
 end
 

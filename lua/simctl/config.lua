@@ -2,6 +2,8 @@ local M = {}
 
 M.options = {
 	notify = true,
+	devicePicker = true,
+	appPicker = true,
 }
 
 -- @param opts nil|table
