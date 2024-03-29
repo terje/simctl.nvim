@@ -56,18 +56,22 @@ M.pickDevice = function(callback)
 	require("simctl.api.list").list(function(success, devices, _, _)
 		if success then
 			table.sort(devices, function(a, b)
-				if a.state == b.state then
-					return a.name < b.name
-				else
+				if a.state ~= b.state then
 					return a.state == "Booted"
 				end
+
+				if a.os ~= b.os then
+					return a.os > b.os
+				end
+
+				return a.name < b.name
 			end)
 
 			local selectDevices = {}
 			for _, device in pairs(devices) do
 				table.insert(
 					selectDevices,
-					pad(device.state, "Shutdown") .. "\t\t" .. device.name .. " - " .. device.os .. " - " .. device.udid
+					pad(device.state, "Shutdown") .. " - " .. device.os .. ": " .. device.name .. " - " .. device.udid
 				)
 			end
 			vim.schedule(function()
