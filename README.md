@@ -21,13 +21,23 @@ Using Lazy:
 }
 ```
 
-## Features - a bird's eye view
+There is no need to call setup if you are ok with the defaults
+
+```lua
+require("simctl").setup({
+  notify = true, -- enable error notifications
+  devicePicker = true, -- show the device picker if no deviceId is supplied
+  appPicker = true, -- show the app picker if no appId is supplied
+})
+```
+
+## Features - a bird's-eye view
 
 The provided Lua API provides coverage of any `simctl` functions that might be most useful from NeoVim, such as launching and terminating apps, booting and shutting down devices, erasing devices and setting UI options.
 
 ![Screenshot of NeoVim showing a dropdown picker of a device list](screenshot-picker.png)
 
-The API presents pickers for devices and apps if none are supplied, so most of the API functions can be called without arguments, for instance: `require("simctl.api").launch()`
+The API presents pickers for devices and apps if none are supplied, so most of the API functions can be called without arguments for interactive use, for instance: `require("simctl.api").launch()`
 
 There is also support for testing push notifications, either through the API function, or directly from an .apns or .json file using the `SimctlNotify` command.
 
@@ -79,6 +89,40 @@ Add any of these to your keymap for easy access:
 ```lua
 vim.keymap.set("n", "<leader>ib", function()
 require("simctl.api").boot()
+end)
+```
+
+## API Usage
+
+All API functions take two optional arguments, `args` and `callback`.
+
+Args is used to pass options to the function, and callback returns the result since all functions are asynchronous so as to not block the UI. Here's an example:
+
+```lua
+local args = {
+  deviceId = "FE4BD15E-C65C-45DB-960A-78A771B16D17",
+  appId = "host.exp.Exponent"
+}
+
+require("simctl.api").launch(args)
+```
+
+The API is designed to be as forgiving as possible, and will present UI pickers for required options that weren't supplied, for instance a deviceId.
+
+The deviceId `booted` is a special ID that picks one of the booted simulators at random. Useful if you only have one booted or don't care which simulator runs your command.
+
+Functions that are expected to return a result do so through a callback. Here's an example:
+
+```lua
+local simctl = require("simctl.api")
+
+local args = {
+  deviceId = "FE4BD15E-C65C-45DB-960A-78A771B16D17"
+  appType = simctl.AppType.User
+}
+
+simctl.listapps(args, function(success, apps, stdout, stderr)
+  print(vim.inspect(apps))
 end)
 ```
 
@@ -261,10 +305,10 @@ simctl.ui.contentSize({}, function(success, contentSize)
 end)
 
 -- Set content size to accessibility-large
-simctl.ui.contentSize({ size = simctl.ui.ContentSize.ACCESSIBILITY_LARGE })
+simctl.ui.setContentSize({ size = simctl.ui.ContentSize.ACCESSIBILITY_LARGE })
 
 -- Increment content size
-simctl.ui.contentSize({ size = simctl.ui.ContentSizeModifier.INCREMENT })
+simctl.ui.setContentSize({ size = simctl.ui.ContentSizeModifier.INCREMENT })
 
 -- Return current appearance
 simctl.ui.appearance({}, function(success, appearance)
@@ -272,8 +316,15 @@ simctl.ui.appearance({}, function(success, appearance)
 end)
 
 -- Set appearance to dark
-simctl.ui.appearance({ appearance = simctl.ui.Appearance.DARK })
+simctl.ui.setAppearance({ appearance = simctl.ui.Appearance.DARK })
 
+-- Return current contrast mode
+simctl.ui.increaseContrast({}, function(success, enabled)
+    print("High contrast is " .. tostring(enabled))
+end)
+
+-- Set increased contrast
+simctl.ui.increaseContrast({ enabled = true })
 ```
 
 ### Uninstall app
