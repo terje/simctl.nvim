@@ -48,7 +48,7 @@ end
 -- @param args Table containing the following keys:
 -- @param args.deviceId string The id of the device to affect
 M.contentSize = function(args, callback)
-  callback = callback or function(_, _, _) end
+  callback = callback or util.defaultCallback
   args = args or {}
 
   aw.async(function()
@@ -79,7 +79,7 @@ end
 -- @param args.deviceId string The id of the device to affect
 -- @param args.size string The new size of the content
 M.setContentSize = function(args, callback)
-  callback = callback or function(_, _, _) end
+  callback = callback or function() end
   args = args or {}
 
   aw.async(function()
@@ -136,7 +136,7 @@ local isValidAppearance = function(appearance)
 end
 
 M.appearance = function(args, callback)
-  callback = callback or function(_, _, _) end
+  callback = callback or util.defaultCallback
   args = args or {}
 
   aw.async(function()
@@ -213,7 +213,7 @@ M.setAppearance = function(args, callback)
 end
 
 M.toggleAppearance = function(args, callback)
-  callback = callback or function(_, _, _) end
+  callback = callback or util.defaultCallback
   args = args or {}
 
   aw.async(function()
@@ -235,6 +235,7 @@ M.toggleAppearance = function(args, callback)
     args.appearance = appearance == M.Appearance.LIGHT and M.Appearance.DARK or M.Appearance.LIGHT
 
     M.setAppearance(args, callback)
+    callback(true, "Set appearance to " .. args.appearance)
   end)
 end
 

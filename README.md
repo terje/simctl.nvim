@@ -257,9 +257,9 @@ end)
 ```lua
 local simctl = require("simctl.api")
 
-simctl.statusBar({
-    [simctl.StatusBarFlag.BATTERY_LEVEL] = 50,
-    [simctl.StatusBarFlag.TIME] = "09:41"
+simctl.statusbar({
+    [simctl.StatusbarFlag.BATTERY_LEVEL] = 50,
+    [simctl.StatusbarFlag.TIME] = "09:41"
 })
 ```
 

@@ -21,4 +21,8 @@ M.trim = function(s)
   return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
+M.defaultCallback = function(success, result)
+  M.notify(result, success and vim.log.levels.INFO or vim.log.levels.ERROR)
+end
+
 return M

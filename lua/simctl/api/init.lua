@@ -18,6 +18,6 @@ M.DataNetworkType = require("simctl.api.statusbar").DataNetworkType
 M.WifiMode = require("simctl.api.statusbar").WifiMode
 M.CellularMode = require("simctl.api.statusbar").CellularMode
 M.BatteryState = require("simctl.api.statusbar").BatteryState
-M.StatusBarFlag = require("simctl.api.statusbar").StatusBarFlag
+M.StatusbarFlag = require("simctl.api.statusbar").StatusbarFlag
 
 return M
