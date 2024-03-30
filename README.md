@@ -41,6 +41,8 @@ The API presents pickers for devices and apps if none are supplied, so most of t
 
 There is also support for testing push notifications, either through the API function, or directly from an .apns or .json file using the `SimctlNotify` command.
 
+See the [Wiki](https://github.com/terje/simctl.nvim/wiki) for more example usages, for instance with [Expo](https://github.com/terje/simctl.nvim/wiki/Example-Expo-setup).
+
 ## Push notifications
 
 The `SimctlNotify` command is automatically registered for `.json` and `.apns` files. The same action is registered for both, although the convention is for plain json files to only include the notification payload and the `.apns` file to include an additional `"Simulator Target Bundle"` indicating the app bundle ID to target:
