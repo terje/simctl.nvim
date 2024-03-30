@@ -1,0 +1,19 @@
+name: Run Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      name: Checkout repository
+      
+    - name: Set up NeoVim
+      run: |
+        sudo add-apt-repository ppa:neovim-ppa/unstable
+        sudo apt-get update
+        sudo apt-get install neovim
+
+    - name: Run tests
+      run: make test
