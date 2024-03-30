@@ -340,10 +340,3 @@ end
 
 require("simctl.api").uninstall(args, callback)
 ```
-
-### Future
-
-* Build your own custom actions in NeoVim to interact with or retrieve information from a running simulator, such as resetting, installing or uninstalling apps or resetting device state as part of your dev workflow.
-* Boot or shut down simulators.
-* Test push notifications from NeoVim
-* Telescope integration for selecting simulators and actions
