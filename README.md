@@ -80,6 +80,7 @@ simctl.ui.contentSize()
 simctl.ui.setContentSize()
 simctl.ui.appearance()
 simctl.ui.setAppearance()
+simctl.ui.toggleAppearance()
 simctl.ui.increaseContrast()
 
 local pickers = require("simctl.lib.pickers")
@@ -319,6 +320,9 @@ end)
 
 -- Set appearance to dark
 simctl.ui.setAppearance({ appearance = simctl.ui.Appearance.DARK })
+
+-- Toggle appearance between light and dark
+simctl.ui.toggleAppearance()
 
 -- Return current contrast mode
 simctl.ui.increaseContrast({}, function(success, enabled)
