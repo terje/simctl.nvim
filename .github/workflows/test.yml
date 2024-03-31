@@ -15,5 +15,9 @@ jobs:
         sudo apt-get update
         sudo apt-get install neovim
 
+    - name: Setup Neovim environment
+      run: |
+        git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/site/pack/plugins/start/plenary.nvim
+
     - name: Run tests
       run: make test
