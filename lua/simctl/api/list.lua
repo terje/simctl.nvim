@@ -47,6 +47,4 @@ M.list = function(callback)
 	end)
 end
 
-M.list()
-
 return M
