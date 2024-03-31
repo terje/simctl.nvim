@@ -16,7 +16,7 @@ M.pickApp = function(deviceId, callback)
     return
   end
 
-  require("simctl.api.listapps").listapps({ deviceId = deviceId }, function(success, apps)
+  require("simctl.api").listapps({ deviceId = deviceId }, function(success, apps)
     if not success then
       callback(nil)
       return
@@ -38,13 +38,15 @@ M.pickApp = function(deviceId, callback)
       )
     end
 
-    vim.ui.select(selectApps, { prompt = "Select an app" }, function(selected)
-      if selected == nil then
-        callback(nil)
-        return
-      end
+    vim.schedule(function()
+      vim.ui.select(selectApps, { prompt = "Select an app" }, function(selected)
+        if selected == nil then
+          callback(nil)
+          return
+        end
 
-      callback(selected:match(".*%s%-%s(.*)"))
+        callback(selected:match(".*%s%-%s(.*)"))
+      end)
     end)
   end)
 end
@@ -76,13 +78,15 @@ M.pickDevice = function(callback)
       )
     end
 
-    vim.ui.select(selectDevices, { prompt = "Select a device" }, function(selected)
-      if selected == nil then
-        callback(nil)
-        return
-      end
+    vim.schedule(function()
+      vim.ui.select(selectDevices, { prompt = "Select a device" }, function(selected)
+        if selected == nil then
+          callback(nil)
+          return
+        end
 
-      callback(selected:match(".*%s%-%s(.*)"))
+        callback(selected:match(".*%s%-%s(.*)"))
+      end)
     end)
   end)
 end
