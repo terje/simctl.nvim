@@ -5,8 +5,8 @@ local autocmds = require("simctl.autocmds")
 
 -- @param opts nil|table
 M.setup = function(opts)
-	config.setup(opts)
-	autocmds.setup()
+  config.setup(opts)
+  autocmds.setup()
 end
 
 return M

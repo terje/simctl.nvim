@@ -25,9 +25,6 @@ M.execute = function(args, callback)
   local stdoutBuffer = { "" }
   local stderrBuffer = {}
 
-  -- local cmd_output = vim.fn.system("xcrun simctl listapps booted")
-  -- vim.notify(cmd_output)
-
   Job:new({
     command = "xcrun",
     args = simctlArguments,

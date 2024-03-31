@@ -1,4 +1,4 @@
-package.path = package.path .. ";./lua/?.lua;./lua/?/init.lua"
+assert = require("luassert")
 
 local simctl = require("simctl")
 local config = require("simctl.config")
