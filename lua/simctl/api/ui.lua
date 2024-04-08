@@ -12,19 +12,33 @@ M.ContentSizeModifier = {
 }
 
 M.ContentSize = {
-	EXTRA_SMALL = "extra-small",
-	SMALL = "small",
-	MEDIUM = "medium",
-	LARGE = "large",
-	EXTRA_LARGE = "extra-large",
-	EXTRA_EXTRA_LARGE = "extra-extra-large",
-	EXTRA_EXTRA_EXTRA_LARGE = "extra-extra-extra-large",
-	ACCESSIBILITY_MEDIUM = "accessibility-medium",
-	ACCESSIBILITY_LARGE = "accessibility-large",
-	ACCESSIBILITY_EXTRA_LARGE = "accessibility-extra-large",
-	ACCESSIBILITY_EXTRA_EXTRA_LARGE = "accessibility-extra-extra-large",
-	ACCESSIBILITY_EXTRA_EXTRA_EXTRA_LARGE = "accessibility-extra-extra-extra-large",
+  EXTRA_SMALL = "extra-small",
+  SMALL = "small",
+  MEDIUM = "medium",
+  LARGE = "large",
+  EXTRA_LARGE = "extra-large",
+  EXTRA_EXTRA_LARGE = "extra-extra-large",
+  EXTRA_EXTRA_EXTRA_LARGE = "extra-extra-extra-large",
+  ACCESSIBILITY_MEDIUM = "accessibility-medium",
+  ACCESSIBILITY_LARGE = "accessibility-large",
+  ACCESSIBILITY_EXTRA_LARGE = "accessibility-extra-large",
+  ACCESSIBILITY_EXTRA_EXTRA_LARGE = "accessibility-extra-extra-large",
+  ACCESSIBILITY_EXTRA_EXTRA_EXTRA_LARGE = "accessibility-extra-extra-extra-large",
 }
+
+local orderedContentSizes = {
+  M.ContentSize.EXTRA_SMALL,
+  M.ContentSize.SMALL,
+  M.ContentSize.MEDIUM,
+  M.ContentSize.LARGE,
+  M.ContentSize.EXTRA_LARGE,
+  M.ContentSize.EXTRA_EXTRA_LARGE,
+  M.ContentSize.EXTRA_EXTRA_EXTRA_LARGE,
+  M.ContentSize.ACCESSIBILITY_MEDIUM,
+  M.ContentSize.ACCESSIBILITY_LARGE,
+  M.ContentSize.ACCESSIBILITY_EXTRA_LARGE,
+  M.ContentSize.ACCESSIBILITY_EXTRA_EXTRA_LARGE,
+  M.ContentSize.ACCESSIBILITY_EXTRA_EXTRA_EXTRA_LARGE,
 }
 
 local function isValidContentSizeModifier(modifier)
@@ -70,7 +84,7 @@ M.contentSize = function(args, callback)
         return
       end
 
-      callback(return_val == 0, stdout, stdout, stderr)
+      callback(return_val == 0, util.trim(stdout), stdout, stderr)
     end)
   end)
 end
@@ -119,6 +133,71 @@ M.setContentSize = function(args, callback)
 
       callback(return_val == 0, stdout, stdout, stderr)
     end)
+  end)
+end
+
+local nextSizeUp = function(currentSize)
+  for i, size in ipairs(orderedContentSizes) do
+    if size == currentSize then
+      return orderedContentSizes[i + 1]
+    end
+  end
+
+  return nil
+end
+
+local nextSizeDown = function(currentSize)
+  for i, size in ipairs(orderedContentSizes) do
+    if size == currentSize then
+      return orderedContentSizes[i - 1]
+    end
+  end
+
+  return nil
+end
+
+M.increaseContentSize = function(args, callback)
+  callback = callback or function() end
+  args = args or {}
+
+  M.contentSize(args, function(success, result)
+    if not success then
+      callback(false)
+      return
+    end
+
+    local newSize = nextSizeUp(result)
+    if not newSize then
+      callback(false)
+      return
+    end
+
+    args.size = newSize
+
+    M.setContentSize(args, callback)
+  end)
+end
+
+M.decreaseContentSize = function(args, callback)
+  callback = callback or function() end
+  args = args or {}
+
+  M.contentSize(args, function(success, result)
+    if not success then
+      callback(false)
+      return
+    end
+
+    local newSize = nextSizeDown(result)
+
+    if not newSize then
+      callback(false)
+      return
+    end
+
+    args.size = newSize
+
+    M.setContentSize(args, callback)
   end)
 end
 
@@ -236,7 +315,6 @@ M.toggleAppearance = function(args, callback)
     args.appearance = appearance == M.Appearance.LIGHT and M.Appearance.DARK or M.Appearance.LIGHT
 
     M.setAppearance(args, callback)
-    callback(true, "Set appearance to " .. args.appearance)
   end)
 end
 
