@@ -12,18 +12,19 @@ M.ContentSizeModifier = {
 }
 
 M.ContentSize = {
-  EXTRA_SMALL = "extra-small",
-  SMALL = "small",
-  MEDIUM = "medium",
-  LARGE = "large",
-  EXTRA_LARGE = "extra-large",
-  EXTRA_EXTRA_LARGE = "extra-extra-large",
-  EXTRA_EXTRA_EXTRA_LARGE = "extra-extra",
-  ACCESSIBILITY_MEDIUM = "accessibility-medium",
-  ACCESSIBILITY_LARGE = "accessibility-large",
-  ACCESSIBILITY_EXTRA_LARGE = "accessibility-extra-large",
-  ACCESSIBILITY_EXTRA_EXTRA_LARGE = "accessibility-extra-extra-large",
-  ACCESSIBILITY_EXTRA_EXTRA_EXTRA_LARGE = "accessibility-extra-extra-extra-large",
+	EXTRA_SMALL = "extra-small",
+	SMALL = "small",
+	MEDIUM = "medium",
+	LARGE = "large",
+	EXTRA_LARGE = "extra-large",
+	EXTRA_EXTRA_LARGE = "extra-extra-large",
+	EXTRA_EXTRA_EXTRA_LARGE = "extra-extra-extra-large",
+	ACCESSIBILITY_MEDIUM = "accessibility-medium",
+	ACCESSIBILITY_LARGE = "accessibility-large",
+	ACCESSIBILITY_EXTRA_LARGE = "accessibility-extra-large",
+	ACCESSIBILITY_EXTRA_EXTRA_LARGE = "accessibility-extra-extra-large",
+	ACCESSIBILITY_EXTRA_EXTRA_EXTRA_LARGE = "accessibility-extra-extra-extra-large",
+}
 }
 
 local function isValidContentSizeModifier(modifier)
