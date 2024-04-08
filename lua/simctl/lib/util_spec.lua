@@ -90,12 +90,12 @@ describe("util", function()
     assert.are.same("", result)
   end)
 
-  it("should provide a default callback and notify of success", function()
+  it("should provide a default callback but not notify of success", function()
     local message = "Hello, World!"
     stub(vim, "notify")
     util.defaultCallback(true, message)
 
-    assert.stub(vim.notify).was.called_with("iOS Simulator: " .. message, vim.log.levels.INFO)
+    assert.stub(vim.notify).was_not_called()
   end)
 
   it("should provide a default callback and notify of error", function()
