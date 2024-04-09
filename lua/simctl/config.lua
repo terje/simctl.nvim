@@ -4,6 +4,7 @@ M.options = {
   notify = true,
   devicePicker = true,
   appPicker = true,
+  defaultToBootedDevice = false,
 }
 
 -- @param opts nil|table

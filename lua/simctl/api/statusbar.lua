@@ -69,9 +69,17 @@ M.statusbar = function(args, callback)
       args.deviceId = aw.await(pickers.pickDevice)
     end
 
-    args = util.merge(args, {
-      deviceId = "booted",
-    })
+    if config.options.defaultToBootedDevice then
+      args = util.merge(args, {
+        deviceId = "booted",
+      })
+    end
+
+    if args.deviceId == nil then
+      util.notify("No device selected", vim.log.levels.ERROR)
+      callback(false)
+      return
+    end
 
     local commandArgs = { "status_bar", args.deviceId }
     if args.clear then

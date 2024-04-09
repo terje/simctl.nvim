@@ -71,9 +71,17 @@ M.contentSize = function(args, callback)
       args.deviceId = aw.await(pickers.pickDevice)
     end
 
-    args = util.merge(args, {
-      deviceId = "booted",
-    })
+    if config.options.defaultToBootedDevice then
+      args = util.merge(args, {
+        deviceId = "booted",
+      })
+    end
+
+    if args.deviceId == nil then
+      util.notify("No device selected", vim.log.levels.ERROR)
+      callback(false)
+      return
+    end
 
     simctl.execute({ "ui", args.deviceId, "content_size" }, function(return_val, humane, stdout, stderr)
       if return_val ~= 0 then
@@ -102,9 +110,17 @@ M.setContentSize = function(args, callback)
       args.deviceId = aw.await(pickers.pickDevice)
     end
 
-    args = util.merge(args, {
-      deviceId = "booted",
-    })
+    if config.options.defaultToBootedDevice then
+      args = util.merge(args, {
+        deviceId = "booted",
+      })
+    end
+
+    if args.deviceId == nil then
+      util.notify("No device selected", vim.log.levels.ERROR)
+      callback(false)
+      return
+    end
 
     if args.size and not isValidContentSize(args.size) and not isValidContentSizeModifier(args.size) then
       util.notify(args.size .. " is not a valid content size", vim.log.levels.ERROR)
@@ -224,9 +240,17 @@ M.appearance = function(args, callback)
       args.deviceId = aw.await(pickers.pickDevice)
     end
 
-    args = util.merge(args, {
-      deviceId = "booted",
-    })
+    if config.options.defaultToBootedDevice then
+      args = util.merge(args, {
+        deviceId = "booted",
+      })
+    end
+
+    if args.deviceId == nil then
+      util.notify("No device selected", vim.log.levels.ERROR)
+      callback(false)
+      return
+    end
 
     simctl.execute({ "ui", args.deviceId, "appearance" }, function(return_val, humane, stdout, stderr)
       if return_val ~= 0 then
@@ -255,9 +279,17 @@ M.setAppearance = function(args, callback)
       args.deviceId = aw.await(pickers.pickDevice)
     end
 
-    args = util.merge(args, {
-      deviceId = "booted",
-    })
+    if config.options.defaultToBootedDevice then
+      args = util.merge(args, {
+        deviceId = "booted",
+      })
+    end
+
+    if args.deviceId == nil then
+      util.notify("No device selected", vim.log.levels.ERROR)
+      callback(false)
+      return
+    end
 
     if args.appearance and not isValidAppearance(args.appearance) then
       util.notify(args.appearance .. " is not a valid appearance", vim.log.levels.ERROR)
@@ -301,9 +333,17 @@ M.toggleAppearance = function(args, callback)
       args.deviceId = aw.await(pickers.pickDevice)
     end
 
-    args = util.merge(args, {
-      deviceId = "booted",
-    })
+    if config.options.defaultToBootedDevice then
+      args = util.merge(args, {
+        deviceId = "booted",
+      })
+    end
+
+    if args.deviceId == nil then
+      util.notify("No device selected", vim.log.levels.ERROR)
+      callback(false)
+      return
+    end
 
     local appearance = aw.await(function(cb)
       M.appearance(args, function(success, result)
@@ -327,9 +367,17 @@ M.increaseContrast = function(args, callback)
       args.deviceId = aw.await(pickers.pickDevice)
     end
 
-    args = util.merge(args, {
-      deviceId = "booted",
-    })
+    if config.options.defaultToBootedDevice then
+      args = util.merge(args, {
+        deviceId = "booted",
+      })
+    end
+
+    if args.deviceId == nil then
+      util.notify("No device selected", vim.log.levels.ERROR)
+      callback(false)
+      return
+    end
 
     if args.enabled and not type(args.enabled) == "boolean" then
       util.notify(args.enabled .. " is not a boolean", vim.log.levels.ERROR)

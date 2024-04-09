@@ -7,87 +7,95 @@ local pickers = require("simctl.lib.pickers")
 local config = require("simctl.config")
 
 local function filterAppsByType(parentTbl, appType)
-	local filteredApps = {}
-	for key, subTbl in pairs(parentTbl) do
-		if subTbl.ApplicationType == appType then
-			filteredApps[key] = subTbl
-		end
-	end
-	return filteredApps
+  local filteredApps = {}
+  for key, subTbl in pairs(parentTbl) do
+    if subTbl.ApplicationType == appType then
+      filteredApps[key] = subTbl
+    end
+  end
+  return filteredApps
 end
 
 M.AppType = {
-	User = "User",
-	System = "System",
+  User = "User",
+  System = "System",
 }
 
 --- List installed apps
 -- @param args.appType string Optional type of app to filter by, User or System
 -- @param callback function indicating success or failure and a table of apps
 M.listapps = function(args, callback)
-	callback = callback or function() end
-	args = args or {}
+  callback = callback or function() end
+  args = args or {}
 
-	aw.async(function()
-		if args.deviceId == nil and config.options.devicePicker then
-			args.deviceId = aw.await(pickers.pickDevice)
-		end
+  aw.async(function()
+    if args.deviceId == nil and config.options.devicePicker then
+      args.deviceId = aw.await(pickers.pickDevice)
+    end
 
-		args = util.merge(args, {
-			deviceId = "booted",
-		})
+    if config.options.defaultToBootedDevice then
+      args = util.merge(args, {
+        deviceId = "booted",
+      })
+    end
 
-		simctl.execute({ "listapps", args.deviceId }, function(return_val, humane, stdout, stderr)
-			if return_val ~= 0 then
-				local message = humane or stderr
-				util.notify(message)
+    if args.deviceId == nil then
+      util.notify("No device selected", vim.log.levels.ERROR)
+      callback(false)
+      return
+    end
 
-				callback(false, nil, stdout, stderr)
-				return
-			end
+    simctl.execute({ "listapps", args.deviceId }, function(return_val, humane, stdout, stderr)
+      if return_val ~= 0 then
+        local message = humane or stderr
+        util.notify(message)
 
-			vim.schedule(function()
-				local tmpFilePath = os.tmpname()
-				local file = io.open(tmpFilePath, "w")
-				if file then
-					file:write(stdout)
-					file:close()
-				else
-					callback(false)
-					return
-				end
+        callback(false, nil, stdout, stderr)
+        return
+      end
 
-				local command = string.format('plutil -convert json -o - "%s"', tmpFilePath)
-				local jsonOutput = vim.fn.system(command)
+      vim.schedule(function()
+        local tmpFilePath = os.tmpname()
+        local file = io.open(tmpFilePath, "w")
+        if file then
+          file:write(stdout)
+          file:close()
+        else
+          callback(false)
+          return
+        end
 
-				if vim.v.shell_error ~= 0 then
-					callback(false, nil, jsonOutput, nil)
-					os.remove(tmpFilePath)
-					return
-				end
+        local command = string.format('plutil -convert json -o - "%s"', tmpFilePath)
+        local jsonOutput = vim.fn.system(command)
 
-				local keyValueApps = vim.json.decode(jsonOutput)
-				if not keyValueApps then
-					callback(false, nil, jsonOutput, nil)
-					os.remove(tmpFilePath)
-					return
-				end
+        if vim.v.shell_error ~= 0 then
+          callback(false, nil, jsonOutput, nil)
+          os.remove(tmpFilePath)
+          return
+        end
 
-				local apps = {}
-				for _, value in pairs(keyValueApps) do
-					table.insert(apps, value)
-				end
+        local keyValueApps = vim.json.decode(jsonOutput)
+        if not keyValueApps then
+          callback(false, nil, jsonOutput, nil)
+          os.remove(tmpFilePath)
+          return
+        end
 
-				if args.appType then
-					apps = filterAppsByType(apps, args.appType)
-				end
+        local apps = {}
+        for _, value in pairs(keyValueApps) do
+          table.insert(apps, value)
+        end
 
-				os.remove(tmpFilePath)
+        if args.appType then
+          apps = filterAppsByType(apps, args.appType)
+        end
 
-				callback(true, apps)
-			end)
-		end)
-	end)
+        os.remove(tmpFilePath)
+
+        callback(true, apps)
+      end)
+    end)
+  end)
 end
 
 return M

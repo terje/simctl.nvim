@@ -28,8 +28,11 @@ require("simctl").setup({
   notify = true, -- enable error notifications
   devicePicker = true, -- show the device picker if no deviceId is supplied
   appPicker = true, -- show the app picker if no appId is supplied
+  defaultToBootedDevice = false, -- default to booted device if no deviceId is supplied
 })
 ```
+
+Note that `devicePicker` and `defaultToBootedDevice` are not mutually exclusive; enabling both and calling an API function without a `deviceId` will first present an interactive device selector, and default to a booted device if the device selector is exited without picking a device.
 
 ## Features - a bird's-eye view
 
@@ -162,7 +165,7 @@ require("simctl.api").erase(args, callback)
 ```lua
 local args = {
     appId = "host.exp.Exponent", -- The app to launch. Required
-    deviceId = "FE4BD15E-C65C-45DB-960A-78A771B16D17" -- Device ID. Optional, will pick a running simulator if not supplied ("booted").
+    deviceId = "FE4BD15E-C65C-45DB-960A-78A771B16D17" -- Device ID
 }
 
 local callback = function(success, _, stdout, stderr)
@@ -186,7 +189,7 @@ require("simctl.api").list(callback)
 local simctl = require("simctl.api")
 
 local args = {
-    deviceId = "FE4BD15E-C65C-45DB-960A-78A771B16D17" -- Device ID. Optional, will pick a running simulator if not supplied ("booted").
+    deviceId = "FE4BD15E-C65C-45DB-960A-78A771B16D17" -- Device ID
     appType = simctl.AppType.User -- Optional. Returns all apps if not filtered
 }
 
@@ -201,7 +204,7 @@ simctl.listapps(args, callback)
 ```lua
 
 local args = {
-    deviceId = "FE4BD15E-C65C-45DB-960A-78A771B16D17" -- Device ID. Optional, will pick a running simulator if not supplied ("booted").
+    deviceId = "FE4BD15E-C65C-45DB-960A-78A771B16D17" -- Device ID
     url = "https://soundthesea.com" -- The URL to open. Required
 }
 
@@ -216,7 +219,7 @@ require("simctl.api").openurl(args, callback)
 ```lua
 local args = {
     appId = "com.test.MyNotifiedApp" -- App bundle ID. Required.
-    deviceId = "FE4BD15E-C65C-45DB-960A-78A771B16D17" -- Device ID. Optional, will pick a running simulator if not supplied ("booted").
+    deviceId = "FE4BD15E-C65C-45DB-960A-78A771B16D17" -- Device ID
     payload = "[JSON]" -- The json payload of the push message (see format above in the SimctlNotify documentation)
 }
 

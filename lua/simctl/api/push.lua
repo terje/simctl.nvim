@@ -11,39 +11,47 @@ local config = require("simctl.config")
 -- @param args.appId string the bundle ID of the app to notify
 -- @param callback function indicating success or failure
 M.push = function(args, callback)
-	callback = callback or function() end
-	args = args or {}
+  callback = callback or function() end
+  args = args or {}
 
-	aw.async(function()
-		if args.deviceId == nil and config.options.devicePicker then
-			args.deviceId = aw.await(pickers.pickDevice)
-		end
+  aw.async(function()
+    if args.deviceId == nil and config.options.devicePicker then
+      args.deviceId = aw.await(pickers.pickDevice)
+    end
 
-		args = util.merge(args, {
-			deviceId = "booted",
-		})
+    if config.options.defaultToBootedDevice then
+      args = util.merge(args, {
+        deviceId = "booted",
+      })
+    end
 
-		if args.appId == nil and config.options.appPicker then
-			args.appId = aw.await(function(appPickerCallback)
-				pickers.pickApp(args.deviceId, appPickerCallback)
-			end)
-		end
+    if args.deviceId == nil then
+      util.notify("No device selected", vim.log.levels.ERROR)
+      callback(false)
+      return
+    end
 
-		if args.appId == nil then
-			util.notify("appId is required", vim.log.levels.ERROR)
-			callback(nil)
-			return
-		end
+    if args.appId == nil and config.options.appPicker then
+      args.appId = aw.await(function(appPickerCallback)
+        pickers.pickApp(args.deviceId, appPickerCallback)
+      end)
+    end
 
-		simctl.execute({ "push", args.deviceId, args.appId, args.payload }, function(return_val, humane, stdout, stderr)
-			if return_val ~= 0 then
-				local message = humane or stderr
-				util.notify(message)
-			end
+    if args.appId == nil then
+      util.notify("appId is required", vim.log.levels.ERROR)
+      callback(nil)
+      return
+    end
 
-			callback(return_val == 0, nil, stdout, stderr)
-		end)
-	end)
+    simctl.execute({ "push", args.deviceId, args.appId, args.payload }, function(return_val, humane, stdout, stderr)
+      if return_val ~= 0 then
+        local message = humane or stderr
+        util.notify(message)
+      end
+
+      callback(return_val == 0, nil, stdout, stderr)
+    end)
+  end)
 end
 
 return M

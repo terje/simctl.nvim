@@ -11,27 +11,35 @@ local config = require("simctl.config")
 -- @param args.deviceId string The simulator identifier. Optional
 -- @param callback function to call when command finishes, indicating success or failure
 M.shutdown = function(args, callback)
-	callback = callback or function() end
-	args = args or {}
+  callback = callback or function() end
+  args = args or {}
 
-	aw.async(function()
-		if args.deviceId == nil and config.options.devicePicker then
-			args.deviceId = aw.await(pickers.pickDevice)
-		end
+  aw.async(function()
+    if args.deviceId == nil and config.options.devicePicker then
+      args.deviceId = aw.await(pickers.pickDevice)
+    end
 
-		args = util.merge(args, {
-			deviceId = "booted",
-		})
+    if config.options.defaultToBootedDevice then
+      args = util.merge(args, {
+        deviceId = "booted",
+      })
+    end
 
-		simctl.execute({ "shutdown", args.deviceId }, function(return_val, humane, stdout, stderr)
-			if return_val ~= 0 then
-				local message = humane or stderr
-				util.notify(message)
-			end
+    if args.deviceId == nil then
+      util.notify("No device selected", vim.log.levels.ERROR)
+      callback(false)
+      return
+    end
 
-			callback(return_val == 0, nil, stdout, stderr)
-		end)
-	end)
+    simctl.execute({ "shutdown", args.deviceId }, function(return_val, humane, stdout, stderr)
+      if return_val ~= 0 then
+        local message = humane or stderr
+        util.notify(message)
+      end
+
+      callback(return_val == 0, nil, stdout, stderr)
+    end)
+  end)
 end
 
 return M
