@@ -7,7 +7,7 @@ local pickers = require("simctl.lib.pickers")
 local config = require("simctl.config")
 
 --- Launch app on a running or a specific iOS Simulator(s)
--- @param args Table containing the following keys:
+-- @param args table containing the following keys:
 -- @param args.deviceId string The simulator identifier.
 -- @param args.appId string The application identifier of the app to launch.
 -- @param callback function indicating success or failure

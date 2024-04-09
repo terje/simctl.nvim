@@ -7,7 +7,7 @@ local pickers = require("simctl.lib.pickers")
 local config = require("simctl.config")
 
 --- Shut down a booted or a specific iOS Simulator(s)
--- @param args Table containing the following keys:
+-- @param args table containing the following keys:
 -- @param args.deviceId string The simulator identifier. Optional
 -- @param callback function to call when command finishes, indicating success or failure
 M.shutdown = function(args, callback)

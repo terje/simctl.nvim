@@ -7,6 +7,7 @@ local pickers = require("simctl.lib.pickers")
 local config = require("simctl.config")
 
 --- Erase (reset) iOS Simulator(s)
+-- @param args table containing the following keys:
 -- @param args.deviceId string ID of the simulator to affect, or "all" for all Simulators
 -- @param callback function indicating success or failure
 M.erase = function(args, callback)

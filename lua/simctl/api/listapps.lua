@@ -22,6 +22,7 @@ M.AppType = {
 }
 
 --- List installed apps
+-- @param args table containing the following keys:
 -- @param args.appType string Optional type of app to filter by, User or System
 -- @param callback function indicating success or failure and a table of apps
 M.listapps = function(args, callback)

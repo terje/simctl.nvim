@@ -7,6 +7,7 @@ local pickers = require("simctl.lib.pickers")
 local config = require("simctl.config")
 
 --- Send a test push notification to an iOS Simulator(s)
+-- @param args table containing the following keys:
 -- @param args.deviceId string ID of the simulator to affect
 -- @param args.appId string the bundle ID of the app to notify
 -- @param callback function indicating success or failure

@@ -7,7 +7,7 @@ local pickers = require("simctl.lib.pickers")
 local config = require("simctl.config")
 
 --- Quit app on a booted or specific iOS Simulator(s)
--- @param args Table containing the following keys:
+-- @param args table containing the following keys:
 -- @param args.appId string The application identifier of the app to quit
 -- @param args.deviceId string The simulator identifier
 -- @param callback function The function to call upon completion. Optional
