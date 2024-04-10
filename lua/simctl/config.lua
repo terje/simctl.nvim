@@ -5,6 +5,7 @@ M.options = {
   devicePicker = true,
   appPicker = true,
   defaultToBootedDevice = false,
+  openSimulatorApp = true,
 }
 
 -- @param opts nil|table

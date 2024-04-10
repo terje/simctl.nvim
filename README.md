@@ -29,6 +29,7 @@ require("simctl").setup({
   devicePicker = true, -- show the device picker if no deviceId is supplied
   appPicker = true, -- show the app picker if no appId is supplied
   defaultToBootedDevice = false, -- default to booted device if no deviceId is supplied
+  openSimulatorApp = true, -- open Simulator.app when booting a device, otherwise the device will run headless
 })
 ```
 

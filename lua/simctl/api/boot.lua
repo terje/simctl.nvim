@@ -32,6 +32,10 @@ M.boot = function(args, callback)
       end
 
       callback(return_val == 0, nil, stdout, stderr)
+
+      if config.options.openSimulatorApp then
+        util.openSimulatorApp()
+      end
     end)
   end)
 end

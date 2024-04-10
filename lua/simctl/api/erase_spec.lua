@@ -5,7 +5,7 @@ local stub = require("luassert.stub")
 local config = require("simctl.config")
 local erase = require("simctl.api.erase")
 
-describe("erase", function()
+describe("api.erase", function()
   config.options.notify = false
 
   it("should erase a device", function()
