@@ -6,6 +6,7 @@ M.options = {
   appPicker = true,
   defaultToBootedDevice = false,
   openSimulatorApp = true,
+  privacyServicePicker = true,
 }
 
 -- @param opts nil|table

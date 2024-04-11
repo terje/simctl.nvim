@@ -38,12 +38,7 @@ local executePrivacyAction = function(args, action, service, callback)
     end
 
     if not util.isValidKey(action, M.Action) then
-      callback(false, "Invalid action: " .. action)
-      return
-    end
-
-    if not util.isValidKey(service, M.Service) then
-      callback(false, "Invalid service: " .. service)
+      callback(false, "Invalid action: " .. (action or "nil"))
       return
     end
 
@@ -55,6 +50,21 @@ local executePrivacyAction = function(args, action, service, callback)
 
     if not args.appId and action ~= M.Action.RESET then
       callback(false, "Missing appId")
+      return
+    end
+
+    if not service and config.options.privacyServicePicker then
+      local options = {}
+      for _, service in pairs(M.Service) do
+        table.insert(options, service)
+      end
+      service = aw.await(function(cb)
+        pickers.pickTableValue("Pick a service", options, cb)
+      end)
+    end
+
+    if not util.isValidKey(service, M.Service) then
+      callback(false, "Invalid service: " .. (service or "nil"))
       return
     end
 
