@@ -115,7 +115,7 @@ describe("util", function()
   it("should return true if the key is found in a table that is a list", function()
     local table = { "A", "B", "C" }
 
-    assert.is_false(util.isValidKey("A", table))
+    assert.is_true(util.isValidKey("A", table))
   end)
 
   it("should trim string", function()
