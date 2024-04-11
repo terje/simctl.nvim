@@ -10,8 +10,10 @@ M.push = require("simctl.api.push").push
 M.shutdown = require("simctl.api.shutdown").shutdown
 M.statusbar = require("simctl.api.statusbar").statusbar
 M.terminate = require("simctl.api.terminate").terminate
-M.ui = require("simctl.api.ui")
 M.uninstall = require("simctl.api.uninstall").uninstall
+
+M.privacy = require("simctl.api.privacy")
+M.ui = require("simctl.api.ui")
 
 M.AppType = require("simctl.api.listapps").AppType
 M.DataNetworkType = require("simctl.api.statusbar").DataNetworkType

@@ -39,6 +39,19 @@ M.openSimulatorApp = function()
   end)
 end
 
+M.isValidKey = function(key, table)
+  if type(table) ~= "table" then
+    return false
+  end
+
+  for _, v in pairs(table) do
+    if v == key then
+      return true
+    end
+  end
+  return false
+end
+
 M.trim = function(s)
   return (s:gsub("^%s*(.-)%s*$", "%1"))
 end

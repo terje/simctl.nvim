@@ -80,6 +80,9 @@ simctl.push()
 simctl.shutdown()
 simctl.statusbar()
 simctl.terminate()
+simctl.privacy.grant()
+simctl.privacy.revoke()
+simctl.privacy.reset()
 simctl.ui.contentSize()
 simctl.ui.setContentSize()
 simctl.ui.increaseContentSize()
@@ -337,6 +340,21 @@ end)
 
 -- Set increased contrast
 simctl.ui.increaseContrast({ enabled = true })
+```
+
+### Grant, revoke, or reset privacy and permissions
+
+```lua
+local simctl = require("simctl.api")
+
+-- Grant access to photos, showing a device picker and an app picker
+simctl.privacy.grant({}, M.Service.PHOTOS)
+
+-- Revoke access from photos for a specific app
+simctl.privacy.revoke({ appId = "host.exp.Exponent" }, M.Service.PHOTOS)
+
+-- Reset privacy settings for all services
+simctl.privacy.reset({}, M.Service.ALL)
 ```
 
 ### Uninstall app

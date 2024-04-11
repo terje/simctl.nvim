@@ -76,6 +76,48 @@ describe("util", function()
     assert.stub(vim.notify).was.called_with("iOS Simulator: " .. message, vim.log.levels.INFO)
   end)
 
+  it("should find a valid key in a table", function()
+    local table = {
+      A = "A",
+      B = "B",
+      C = "C",
+    }
+
+    assert.is_true(util.isValidKey(table.A, table))
+  end)
+
+  it("should find a valid string key in a table", function()
+    local table = {
+      A = "A",
+      B = "B",
+      C = "C",
+    }
+
+    assert.is_true(util.isValidKey("A", table))
+  end)
+
+  it("should return false if the key is not in the table", function()
+    local table = {
+      A = "A",
+      B = "B",
+      C = "C",
+    }
+
+    assert.is_false(util.isValidKey("D", table))
+  end)
+
+  it("should return false if the table is not a table", function()
+    local table = 42
+
+    assert.is_false(util.isValidKey("A", table))
+  end)
+
+  it("should return true if the key is found in a table that is a list", function()
+    local table = { "A", "B", "C" }
+
+    assert.is_false(util.isValidKey("A", table))
+  end)
+
   it("should trim string", function()
     local s = "  Hello, World!  "
     local result = util.trim(s)

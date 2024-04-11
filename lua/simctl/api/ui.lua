@@ -41,24 +41,6 @@ local orderedContentSizes = {
   M.ContentSize.ACCESSIBILITY_EXTRA_EXTRA_EXTRA_LARGE,
 }
 
-local function isValidContentSizeModifier(modifier)
-  for _, v in pairs(M.ContentSizeModifier) do
-    if v == modifier then
-      return true
-    end
-  end
-  return false
-end
-
-local function isValidContentSize(size)
-  for _, v in pairs(M.ContentSize) do
-    if v == size then
-      return true
-    end
-  end
-  return false
-end
-
 --- Get the content size of a running or a specific iOS Simulator(s)
 -- @param args Table containing the following keys:
 -- @param args.deviceId string The id of the device to affect
@@ -122,7 +104,10 @@ M.setContentSize = function(args, callback)
       return
     end
 
-    if args.size and not isValidContentSize(args.size) and not isValidContentSizeModifier(args.size) then
+    local isValidContentSize = util.isValidKey(args.size, M.ContentSize)
+    local isValidContentSizeModifier = util.isValidKey(args.size, M.ContentSizeModifier)
+
+    if args.size and not isValidContentSize and not isValidContentSizeModifier then
       util.notify(args.size .. " is not a valid content size", vim.log.levels.ERROR)
       callback(false)
       return
@@ -222,15 +207,6 @@ M.Appearance = {
   DARK = "dark",
 }
 
-local isValidAppearance = function(appearance)
-  for _, v in pairs(M.Appearance) do
-    if v == appearance then
-      return true
-    end
-  end
-  return false
-end
-
 M.appearance = function(args, callback)
   callback = callback or util.defaultCallback
   args = args or {}
@@ -291,7 +267,9 @@ M.setAppearance = function(args, callback)
       return
     end
 
-    if args.appearance and not isValidAppearance(args.appearance) then
+    local isValidAppearance = util.isValidKey(args.appearance, M.Appearance)
+
+    if args.appearance and not isValidAppearance then
       util.notify(args.appearance .. " is not a valid appearance", vim.log.levels.ERROR)
       callback(false)
       return
