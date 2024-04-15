@@ -36,6 +36,10 @@ require("simctl").setup({
 
 Note that `devicePicker` and `defaultToBootedDevice` are not mutually exclusive; enabling both and calling an API function without a `deviceId` will first present an interactive device selector, and default to a booted device if the device selector is exited without picking a device.
 
+### Optional: Telescope with ui-select extension
+
+If you find the built in `vim.ui.select` to look a bit drab and you want your device selectors and app selectors to look like the screenshot, install [Telescope](https://github.com/nvim-telescope/telescope.nvim) and enable the [ui-select](https://github.com/nvim-telescope/telescope-ui-select.nvim) extension. This will override the built-in function with the Telescope UI.
+
 ## Features - a bird's-eye view
 
 The provided Lua API provides coverage of any `simctl` functions that might be most useful from NeoVim, such as launching and terminating apps, booting and shutting down devices, erasing devices and setting UI options.
