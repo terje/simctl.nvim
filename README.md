@@ -15,6 +15,7 @@ Using Lazy:
 ```lua
 {
   "terje/simctl.nvim",
+  version = "*", -- Use latest release instead of latest commit. Recommended.
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
