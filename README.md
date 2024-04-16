@@ -6,6 +6,16 @@ NeoVim plugin to interact with iOS Simulators straight from the comfort of your 
 
 Have you ever found yourself context switching all the time when you are developing against the iOS Simulator? Tired of having to use the mouse to quit apps, going through the tedious two-three click process of deleting apps before trying a fresh install or having to do other manual steps every time you run your app in development? This plugin is for you!
 
+simctl.nvim can help you:
+
+* Create shortcuts to boot, shut down, restart and reset Simulators
+* Remote control Simulator settings like light/dark mode, permissions and font sizes
+* Develop Expo or React Native apps with easy run actions
+* Automate starting a Simulator when running your front end project
+* Create custom run and build actions setting up the Simulator just so
+* Automate setting UI options like time and network connection for screenshots
+* Test push notifications from APNS or JSON source files
+
 ## Installation
 
 Mac OS and Xcode are required. Make sure `xcrun` is available in your terminal.
