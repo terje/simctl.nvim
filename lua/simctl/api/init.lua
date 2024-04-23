@@ -12,6 +12,7 @@ M.statusbar = require("simctl.api.statusbar").statusbar
 M.terminate = require("simctl.api.terminate").terminate
 M.uninstall = require("simctl.api.uninstall").uninstall
 
+M.biometry = require("simctl.api.biometry")
 M.privacy = require("simctl.api.privacy")
 M.ui = require("simctl.api.ui")
 

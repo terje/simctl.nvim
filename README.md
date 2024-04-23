@@ -15,6 +15,7 @@ simctl.nvim can help you:
 * Create custom run and build actions setting up the Simulator just so
 * Automate setting UI options like time and network connection for screenshots
 * Test push notifications from APNS or JSON source files
+* Enroll biometry and send matching and non-matching authentication
 
 ## Installation
 
@@ -96,9 +97,16 @@ simctl.push()
 simctl.shutdown()
 simctl.statusbar()
 simctl.terminate()
+
+simctl.biometry.setEnrollment()
+simctl.biometry.isEnrolled()
+simctl.biometry.toggleEnrollment()
+simctl.biometry.authenticate()
+
 simctl.privacy.grant()
 simctl.privacy.revoke()
 simctl.privacy.reset()
+
 simctl.ui.contentSize()
 simctl.ui.setContentSize()
 simctl.ui.increaseContentSize()
@@ -222,7 +230,6 @@ simctl.listapps(args, callback)
 ### Open URL
 
 ```lua
-
 local args = {
     deviceId = "FE4BD15E-C65C-45DB-960A-78A771B16D17" -- Device ID
     url = "https://soundthesea.com" -- The URL to open. Required
@@ -273,6 +280,40 @@ simctl.shutdown(device, function(success)
     end)
   end
 end)
+```
+
+### Biometry
+
+#### Set biometry enrollment status
+
+```lua
+local simctl = require("simctl.api")
+simctl.biometry.setEnrollment({ enrolled = true })
+```
+
+#### Get biometry enrollment status
+```lua
+local simctl = require("simctl.api")
+simctl.biometry.isEnrolled({}, function(success, isEnrolled)
+    print(isEnrolled)
+end)
+```
+
+#### Toggle biometry enrollment status
+
+```lua
+local simctl = require("simctl.api")
+simctl.biometry.toggleEnrollment({}, function(success, isEnrolled)
+    print(isEnrolled)
+end)
+```
+
+#### Biometric authentication
+```lua
+local simctl = require("simctl.api")
+simctl.biometry.authenticate() -- This is me
+simctl.biometry.authenticate({ match = true }) -- This is me
+simctl.biometry.authenticate({ match = false }) -- This is someone else
 ```
 
 ### Status bar
