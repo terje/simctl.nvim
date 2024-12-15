@@ -8,18 +8,18 @@ Have you ever found yourself context switching all the time when you are develop
 
 simctl.nvim can help you:
 
-* Create shortcuts to boot, shut down, restart and reset Simulators
-* Remote control Simulator settings like light/dark mode, permissions and font sizes
-* Develop Expo or React Native apps with easy run actions
-* Automate starting a Simulator when running your front end project
-* Create custom run and build actions setting up the Simulator just so
-* Automate setting UI options like time and network connection for screenshots
-* Test push notifications from APNS or JSON source files
-* Enroll biometry and send matching and non-matching authentication
+- Create shortcuts to boot, shut down, restart and reset Simulators
+- Remote control Simulator settings like light/dark mode, permissions and font sizes
+- Develop Expo or React Native apps with easy run actions
+- Automate starting a Simulator when running your front end project
+- Create custom run and build actions setting up the Simulator just so
+- Automate setting UI options like time and network connection for screenshots
+- Test push notifications from APNS or JSON source files
+- Enroll biometry and send matching and non-matching authentication
 
 ## Installation
 
-Mac OS and Xcode are required. Make sure `xcrun` is available in your terminal.
+NeoVim 0.10 or newer on Mac OS, as well as Xcode are required. Make sure `xcrun` is available in your terminal.
 
 Using Lazy:
 
@@ -27,9 +27,6 @@ Using Lazy:
 {
   "terje/simctl.nvim",
   version = "*", -- Use latest release instead of latest commit. Recommended.
-  dependencies = {
-    "nvim-lua/plenary.nvim",
-  },
 }
 ```
 
@@ -70,13 +67,13 @@ The `SimctlNotify` command is automatically registered for `.json` and `.apns` f
 
 ```json
 {
-    "Simulator Target Bundle": "com.test.MyNotifiedApp",
-    "aps": {
-        "alert": {
-            "title": "NeoVim says hello",
-            "body": "Your favourite editor sends its greetings"
-        }
+  "Simulator Target Bundle": "com.test.MyNotifiedApp",
+  "aps": {
+    "alert": {
+      "title": "NeoVim says hello",
+      "body": "Your favourite editor sends its greetings"
     }
+  }
 }
 ```
 
@@ -122,6 +119,7 @@ pickers.pickDevice()
 ```
 
 Add any of these to your keymap for easy access:
+
 ```lua
 vim.keymap.set("n", "<leader>ib", function()
 require("simctl.api").boot()
@@ -253,8 +251,6 @@ local args = {
 require("simctl.api").push(args)
 ```
 
-
-
 ### Shut down device
 
 ```lua
@@ -292,6 +288,7 @@ simctl.biometry.setEnrollment({ enrolled = true })
 ```
 
 #### Get biometry enrollment status
+
 ```lua
 local simctl = require("simctl.api")
 simctl.biometry.isEnrolled({}, function(success, isEnrolled)
@@ -309,6 +306,7 @@ end)
 ```
 
 #### Biometric authentication
+
 ```lua
 local simctl = require("simctl.api")
 simctl.biometry.authenticate() -- This is me
